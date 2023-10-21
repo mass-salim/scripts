@@ -113,7 +113,7 @@
         addExtractAndUnlockJerseysButton: function() {
             let checkInterval = setInterval(function() {
                 let jerseyImage = [...document.getElementsByTagName('img')]
-                        .find(img => img.src.indexOf('jersey.mpg.football') !== -1 && img.width === 96 && img.height === 96);
+                        .find(img => (img.src.indexOf('jersey.mpg.football') !== -1 || img.src.indexOf('image.mpg/prod') !== -1) && img.width === 96 && img.height === 96);
                 if (!!jerseyImage) {
                     clearInterval(checkInterval);
                     functions.addExtractAndUnlockJerseysButtonFromImage(jerseyImage);
