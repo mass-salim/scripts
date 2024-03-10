@@ -1,11 +1,10 @@
 // ==UserScript==
-// @name         MPG Jersey Unlocker
-// @namespace    https://salim.abdelfettah.dev
-// @version      1.1
+// @name         MPG Free Jersey Unlocker
+// @namespace    https://mass-salim.dev
+// @version      1.2.0
 // @description  Unlock all free jerseys
 // @author       mass-salim
 // @match        https://mpg.football/*
-// @icon64       https://www.google.com/s2/favicons?sz=64&domain=mpg.football
 // @updateURL    https://raw.githubusercontent.com/mass-salim/scripts/main/javascript/mpg-jersey-unlocker.js
 // @downloadURL  https://raw.githubusercontent.com/mass-salim/scripts/main/javascript/mpg-jersey-unlocker.js
 // @grant        none
@@ -25,7 +24,7 @@
         extractAndSaveToken: function() {
             console.log('Extracting & saving token');
             let data = JSON.parse(document.body.innerText);
-            if (data.token) {
+            if (!!data.token) {
                 sessionStorage.setItem('__token', data.token);
             } else {
                 console.error('No token found');
@@ -40,7 +39,7 @@
             prepareButton.firstChild.textContent = 'Prepare unlocking';
             prepareButton.href = 'https://mpg.football/shop/locker-room?_data=root';
             jerseyButton.parentElement.insertBefore(prepareButton, nextButton);
-            console.log('Prepare unlocking button is ready');
+            console.log('Prepare unlocking button added');
         },
         handleAddJerseyResponse: function(response, logDiv, jerseyNumber, numberOfJerseys) {
             let logStatus = document.createElement('p');
@@ -75,7 +74,7 @@
             document.body.insertBefore(logDiv, document.body.children[0]);
             logDiv.appendChild(log);
             let numberOfJerseys = jerseysToUnlock.length;
-            log.textContent = `Found ${numberOfJerseys} jerseys to unlock.`
+            log.textContent = `Found ${numberOfJerseys} jersey(s) to unlock.`
             for (let index = 0; index < numberOfJerseys; index++) {
                 let jerseyNumber = index + 1;
                 fetch(`https://api.mpg.football/locker-room/jersey/${jerseysToUnlock[index]}/unlock`, {
@@ -98,7 +97,7 @@
             let unlockButton = unlock.getElementsByTagName('button')[0];
             unlockButton.firstChild.textContent = 'Unlock All Free';
             unlockButton.onclick = function() {
-                fetch('https://api.mpg.football/locker-room/extended', {
+                fetch('https://api.mpg.football/locker-room/extended?showHiddenJerseys=true', {
                     headers: {
                         'Authorization': context.token
                     }
@@ -136,6 +135,6 @@
         },
     };
 
-    functions.checkUrl();
     window.onhashchange = functions.checkUrl;
+    functions.checkUrl();
 })();
